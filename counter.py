@@ -3,7 +3,8 @@
 from os.path import exists
 import sys
 from pickle import dump, load
-
+import pickle
+import os.path
 
 def update_counter(file_name, reset=False):
     """ Updates a counter stored in the file 'file_name'
@@ -30,10 +31,61 @@ def update_counter(file_name, reset=False):
     >>> update_counter('blah2.txt')
     2
     """
-    pass
+    if os.path.exists(file_name)== False:
+    	f = open(file_name, '')
+    	pickle.dump(1, f)
+    	f.close()
+    if reset == True:
+    	f = open(file_name, 'wb')
+    	pickle.dump(1, f)
+    	f.close()
+    else:
+    	f = open(file_name, 'br')
+    	#print(f)
+    	filecounter = pickle.load(f)
+    	f.close()
+    	f = open(file_name, 'wb')
+    	
+    	filecounter+=1
+    	
+    	pickle.dump(filecounter, f)
+    	f.close()
 
+
+    input_file = open(file_name, 'rb')
+    counter = pickle.load(input_file)
+    #print(counter)
+    f.close()
+    return counter
+
+"""
+These files were used in my textmining project
+"""
+def loadbooks():
+	"""
+	Loads books from gutenberg.org. Book id has to be manualy changed each book.
+	"""
+	downloaded_book = requests.get('http://www.gutenberg.org/ebooks/1522.txt.utf-8').text
+	return downloaded_book
+
+def savebook(book_text, filename):
+	"""
+	Saves a the text of a book into a file. 
+	"""
+	f = open(filename, 'wb')
+	pickle.dump(book_text, f)
+	f.close()
+
+def opensavedbook(file):
+	"""
+	Opens a file that is saved on the computer
+	"""
+	input_file = open(file, 'rb')
+	opened_text = pickle.load(input_file)
+	return opened_text
+	
 if __name__ == '__main__':
-    if len(sys.argv) < 2:
+    if len(sys.argv) <= 2:
         import doctest
         doctest.testmod()
     else:
