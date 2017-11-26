@@ -30,11 +30,24 @@ def update_counter(file_name, reset=False):
     >>> update_counter('blah2.txt')
     2
     """
-    pass
+    if exists(file_name) or reset == False:
+        f = open(file_name, 'rb+')
+        count = pickle.load(f) + 1
+        f.close()
+
+        f = open(file_name,'wb')
+        pickle.dump(count,f)
+        f.close()
+        return count
+
+    else:
+        f = open(file_name, 'wb')
+        count = 1
+        pickle.dump(count,f)
+        f.close()
+        return count
+
+
 
 if __name__ == '__main__':
     if len(sys.argv) < 2:
-        import doctest
-        doctest.testmod()
-    else:
-        print("new value is " + str(update_counter(sys.argv[1])))
