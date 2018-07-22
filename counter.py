@@ -40,7 +40,28 @@ def update_counter(file_name, reset=False):
     >>> update_counter('blah2.txt')
     2
     """
-    pass
+    if exists(file_name) and reset == False:
+        file_ = open(file_name, 'rb+')
+        counter = load(file_) + 1
+        file_.close()
+
+        file_ = open(file_name, 'wb')
+        dump(counter, file_)
+        file_.close()
+
+    else:
+        file_ = open(file_name, 'wb')
+        counter = 1
+        dump(counter, file_)
+        file_.close()
+
+    file_ = open(file_name, 'rb+')
+    return load(file_)
+
+#update_counter('how_many_grapes.txt')
+#file_ = open('how_many_grapes.txt', 'rb+')
+#print(load(file_))
+
 
 
 if __name__ == '__main__':
